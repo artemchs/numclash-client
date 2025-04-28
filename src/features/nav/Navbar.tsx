@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { LogOutIcon, MessageCircle, Pi } from "lucide-react";
+import { LogOutIcon, Pi } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -38,12 +38,6 @@ function UserMenu() {
       <DropdownMenuContent align="end" className="w-56">
         <DropdownMenuLabel>{user?.name}</DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <Link to="/invites">
-          <DropdownMenuItem>
-            <MessageCircle className="h-4 w-4 mr-2" />
-            Invites
-          </DropdownMenuItem>
-        </Link>
         <Link to="/logout">
           <DropdownMenuItem variant="destructive">
             <LogOutIcon className="h-4 w-4 mr-2" />
