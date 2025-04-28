@@ -15,6 +15,7 @@ import { Route as LoginImport } from './routes/login'
 import { Route as AuthenticatedImport } from './routes/_authenticated'
 import { Route as AuthenticatedIndexImport } from './routes/_authenticated/index'
 import { Route as AuthenticatedLogoutImport } from './routes/_authenticated/logout'
+import { Route as AuthenticatedGameGameIdImport } from './routes/_authenticated/game.$gameId'
 
 // Create/Update Routes
 
@@ -38,6 +39,12 @@ const AuthenticatedIndexRoute = AuthenticatedIndexImport.update({
 const AuthenticatedLogoutRoute = AuthenticatedLogoutImport.update({
   id: '/logout',
   path: '/logout',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+
+const AuthenticatedGameGameIdRoute = AuthenticatedGameGameIdImport.update({
+  id: '/game/$gameId',
+  path: '/game/$gameId',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
 
@@ -73,6 +80,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedIndexImport
       parentRoute: typeof AuthenticatedImport
     }
+    '/_authenticated/game/$gameId': {
+      id: '/_authenticated/game/$gameId'
+      path: '/game/$gameId'
+      fullPath: '/game/$gameId'
+      preLoaderRoute: typeof AuthenticatedGameGameIdImport
+      parentRoute: typeof AuthenticatedImport
+    }
   }
 }
 
@@ -81,11 +95,13 @@ declare module '@tanstack/react-router' {
 interface AuthenticatedRouteChildren {
   AuthenticatedLogoutRoute: typeof AuthenticatedLogoutRoute
   AuthenticatedIndexRoute: typeof AuthenticatedIndexRoute
+  AuthenticatedGameGameIdRoute: typeof AuthenticatedGameGameIdRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedLogoutRoute: AuthenticatedLogoutRoute,
   AuthenticatedIndexRoute: AuthenticatedIndexRoute,
+  AuthenticatedGameGameIdRoute: AuthenticatedGameGameIdRoute,
 }
 
 const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
@@ -97,12 +113,14 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/logout': typeof AuthenticatedLogoutRoute
   '/': typeof AuthenticatedIndexRoute
+  '/game/$gameId': typeof AuthenticatedGameGameIdRoute
 }
 
 export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/logout': typeof AuthenticatedLogoutRoute
   '/': typeof AuthenticatedIndexRoute
+  '/game/$gameId': typeof AuthenticatedGameGameIdRoute
 }
 
 export interface FileRoutesById {
@@ -111,19 +129,21 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/_authenticated/logout': typeof AuthenticatedLogoutRoute
   '/_authenticated/': typeof AuthenticatedIndexRoute
+  '/_authenticated/game/$gameId': typeof AuthenticatedGameGameIdRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '' | '/login' | '/logout' | '/'
+  fullPaths: '' | '/login' | '/logout' | '/' | '/game/$gameId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/login' | '/logout' | '/'
+  to: '/login' | '/logout' | '/' | '/game/$gameId'
   id:
     | '__root__'
     | '/_authenticated'
     | '/login'
     | '/_authenticated/logout'
     | '/_authenticated/'
+    | '/_authenticated/game/$gameId'
   fileRoutesById: FileRoutesById
 }
 
@@ -155,7 +175,8 @@ export const routeTree = rootRoute
       "filePath": "_authenticated.tsx",
       "children": [
         "/_authenticated/logout",
-        "/_authenticated/"
+        "/_authenticated/",
+        "/_authenticated/game/$gameId"
       ]
     },
     "/login": {
@@ -167,6 +188,10 @@ export const routeTree = rootRoute
     },
     "/_authenticated/": {
       "filePath": "_authenticated/index.tsx",
+      "parent": "/_authenticated"
+    },
+    "/_authenticated/game/$gameId": {
+      "filePath": "_authenticated/game.$gameId.tsx",
       "parent": "/_authenticated"
     }
   }
